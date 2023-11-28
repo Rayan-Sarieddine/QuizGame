@@ -30,14 +30,13 @@ async function getURL() {
     });
   });
 }
-
+let useranswers = [];
 async function processData() {
   let response;
-  let useranswers = [];
+
   try {
     const url = await getURL();
     response = await axios.get(url);
-    // console.log("Data:", response.data);
     displayQuestion(response.data); // Display the first question
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -57,6 +56,7 @@ async function processData() {
   });
 }
 let questionindex = 0;
+let correctanswerarray = [];
 function displayQuestion(questionsData) {
   const currentQuestion = questionsData[questionindex]; // Displaying the first question
   question.innerHTML = currentQuestion.question;
@@ -65,11 +65,42 @@ function displayQuestion(questionsData) {
     document.querySelector(`label[for="${opt.id}"]`).innerHTML =
       questionsData[questionindex].answers[`answer_${opt.id}`];
   });
+  let correctAnswerKey = Object.keys(currentQuestion.correct_answers).find(
+    (key) => currentQuestion.correct_answers[key] === "true"
+  );
+
+  correctanswerarray.push({
+    [currentQuestion.id]: correctAnswerKey.slice(7, 8),
+  });
+  console.log(correctanswerarray);
 }
 
 function displayNextQuestion(x) {
-  questionindex++;
-  displayQuestion(x);
+  if (questionindex < questions - 1) {
+    questionindex++;
+    displayQuestion(x);
+  } else {
+    grading(correctanswerarray, useranswers);
+  }
 }
 
 processData();
+let finalgrade = 0;
+const answers_container = document.querySelector(".answers-container");
+function grading(answer, useranswer) {
+  answer.map((obj, i) => {
+    for (const [key, value] of Object.entries(obj)) {
+      if (useranswer[i][key] == value) {
+        finalgrade++;
+      }
+    }
+  });
+  console.log("grade", finalgrade);
+  questions_container.classList.add("hidden");
+  answers_container.classList.remove("hidden");
+  document.querySelector(
+    ".results-value"
+  ).innerHTML = `You scored ${finalgrade} out of ${questions}`;
+  document.querySelector("#view-answers").addEventListener("click", barem);
+}
+function barem() {}
