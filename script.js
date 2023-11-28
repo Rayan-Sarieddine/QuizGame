@@ -86,12 +86,17 @@ function displayNextQuestion(x) {
 
 processData();
 let finalgrade = 0;
+let wrongAnswers = [];
 const answers_container = document.querySelector(".answers-container");
 function grading(answer, useranswer, x) {
   answer.map((obj, i) => {
     for (const [key, value] of Object.entries(obj)) {
       if (useranswer[i][key] == value) {
         finalgrade++;
+      } else {
+        wrongAnswers.push({
+          [Object.keys(useranswer[i])[0]]: useranswer[i][key],
+        });
       }
     }
   });
@@ -104,19 +109,30 @@ function grading(answer, useranswer, x) {
   document.querySelector("#view-answers").addEventListener("click", () => {
     barem(x);
   });
+  console.log(wrongAnswers);
 }
+
 function barem(x) {
   x.forEach((questionBarem) => {
+    let flagwrong = false;
+    let wrongchoice;
+    wrongAnswers.forEach((obj) => {
+      for (const [key, value] of Object.entries(obj)) {
+        console.log("xid", questionBarem.id, key);
+        if (questionBarem.id == key) {
+          flagwrong = true;
+          wrongchoice = value;
+        }
+      }
+    });
     let div_answer = document.createElement("div");
     console.log(questionBarem.correct_answers["answer_c_correct"]);
     div_answer.innerHTML = `
     <h2 id="barem-question ${questionBarem.id}">${questionBarem.question}</h2>
           <ul>
-            <li id="a_barem" class="barem_answer ${
-              questionBarem.correct_answers["answer_a_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="a_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_a_correct"] == "true" ? "green" : ""
+    }">
               ${
                 questionBarem.answers["answer_a"] == null
                   ? "-"
@@ -124,11 +140,9 @@ function barem(x) {
               }
             </li>
   
-            <li id="b_barem" class="barem_answer ${
-              questionBarem.correct_answers["answer_b_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="b_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_b_correct"] == "true" ? "green" : ""
+    }">
                ${
                  questionBarem.answers["answer_b"] == null
                    ? "-"
@@ -136,11 +150,9 @@ function barem(x) {
                }
             </li>
   
-            <li id="c_barem" class="barem_answer ${
-              questionBarem.correct_answers["answer_c_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="c_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_c_correct"] == "true" ? "green" : ""
+    }">
               ${
                 questionBarem.answers["answer_c"] == null
                   ? "-"
@@ -148,33 +160,27 @@ function barem(x) {
               }
             </li>
   
-            <li id="d_barem" class="barem_answer ${
-              questionBarem.correct_answers["answer_d_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="d_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_d_correct"] == "true" ? "green" : ""
+    }">
               ${
                 questionBarem.answers["answer_d"] == null
                   ? "-"
                   : questionBarem.answers["answer_d"]
               }
             </li>
-            <li id="e_barem" class="barem_answer ${
-              questionBarem.correct_answers["answer_e_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="e_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_e_correct"] == "true" ? "green" : ""
+    }">
                ${
                  questionBarem.answers["answer_e"] == null
                    ? "-"
                    : questionBarem.answers["answer_e"]
                }
             </li>
-            <li id="fbarem" class="barem_answer ${
-              questionBarem.correct_answers["answer_f_correct"] == "true"
-                ? "green"
-                : ""
-            }">
+            <li id="f_barem${questionBarem.id}" class="barem_answer ${
+      questionBarem.correct_answers["answer_f_correct"] == "true" ? "green" : ""
+    }">
                ${
                  questionBarem.answers["answer_f"] == null
                    ? "-"
@@ -184,8 +190,10 @@ function barem(x) {
           </ul>
    `;
     document.querySelector(".barem-all").appendChild(div_answer);
+    if (flagwrong) {
+      document
+        .querySelector(`#${wrongchoice}_barem${questionBarem.id}`)
+        .classList.add("red");
+    }
   });
-  //1-get questions data and destructure
-  //2-create a div for each movie and append it in html
-  //3-go through correct answers to mark them green
 }
