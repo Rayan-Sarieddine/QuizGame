@@ -80,14 +80,14 @@ function displayNextQuestion(x) {
     questionindex++;
     displayQuestion(x);
   } else {
-    grading(correctanswerarray, useranswers);
+    grading(correctanswerarray, useranswers, x);
   }
 }
 
 processData();
 let finalgrade = 0;
 const answers_container = document.querySelector(".answers-container");
-function grading(answer, useranswer) {
+function grading(answer, useranswer, x) {
   answer.map((obj, i) => {
     for (const [key, value] of Object.entries(obj)) {
       if (useranswer[i][key] == value) {
@@ -101,6 +101,67 @@ function grading(answer, useranswer) {
   document.querySelector(
     ".results-value"
   ).innerHTML = `You scored ${finalgrade} out of ${questions}`;
-  document.querySelector("#view-answers").addEventListener("click", barem);
+  document.querySelector("#view-answers").addEventListener("click", () => {
+    barem(x);
+  });
 }
-function barem() {}
+function barem(x) {
+  x.forEach((questionBarem) => {
+    let div_answer = document.createElement("div");
+    console.log(questionBarem.correct_answers["answer_c_correct"]);
+    div_answer.innerHTML = `
+    <h2 id="barem-question ${questionBarem.id}">${questionBarem.question}</h2>
+          <ul>
+            <li id="a_barem" class="barem_answer ${
+              questionBarem.correct_answers["answer_a_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+              ${questionBarem.answers["answer_a"]}
+            </li>
+  
+            <li id="b_barem" class="barem_answer ${
+              questionBarem.correct_answers["answer_b_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+               ${questionBarem.answers["answer_b"]}
+            </li>
+  
+            <li id="c_barem" class="barem_answer ${
+              questionBarem.correct_answers["answer_c_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+              ${questionBarem.answers["answer_c"]}
+            </li>
+  
+            <li id="d_barem" class="barem_answer ${
+              questionBarem.correct_answers["answer_d_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+              ${questionBarem.answers["answer_d"]}
+            </li>
+            <li id="e_barem" class="barem_answer ${
+              questionBarem.correct_answers["answer_e_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+               ${questionBarem.answers["answer_e"]}
+            </li>
+            <li id="fbarem" class="barem_answer ${
+              questionBarem.correct_answers["answer_f_correct"] == "true"
+                ? "green"
+                : ""
+            }">
+               ${questionBarem.answers["answer_f"]}
+            </li>
+          </ul>
+   `;
+    document.querySelector(".barem-all").appendChild(div_answer);
+  });
+  //1-get questions data and destructure
+  //2-create a div for each movie and append it in html
+  //3-go through correct answers to mark them green
+}
