@@ -117,7 +117,11 @@ function barem(x) {
                 ? "green"
                 : ""
             }">
-              ${questionBarem.answers["answer_a"]}
+              ${
+                questionBarem.answers["answer_a"] == null
+                  ? "-"
+                  : questionBarem.answers["answer_a"]
+              }
             </li>
   
             <li id="b_barem" class="barem_answer ${
@@ -125,7 +129,11 @@ function barem(x) {
                 ? "green"
                 : ""
             }">
-               ${questionBarem.answers["answer_b"]}
+               ${
+                 questionBarem.answers["answer_b"] == null
+                   ? "-"
+                   : questionBarem.answers["answer_b"]
+               }
             </li>
   
             <li id="c_barem" class="barem_answer ${
@@ -133,7 +141,11 @@ function barem(x) {
                 ? "green"
                 : ""
             }">
-              ${questionBarem.answers["answer_c"]}
+              ${
+                questionBarem.answers["answer_c"] == null
+                  ? "-"
+                  : questionBarem.answers["answer_c"]
+              }
             </li>
   
             <li id="d_barem" class="barem_answer ${
@@ -141,21 +153,33 @@ function barem(x) {
                 ? "green"
                 : ""
             }">
-              ${questionBarem.answers["answer_d"]}
+              ${
+                questionBarem.answers["answer_d"] == null
+                  ? "-"
+                  : questionBarem.answers["answer_d"]
+              }
             </li>
             <li id="e_barem" class="barem_answer ${
               questionBarem.correct_answers["answer_e_correct"] == "true"
                 ? "green"
                 : ""
             }">
-               ${questionBarem.answers["answer_e"]}
+               ${
+                 questionBarem.answers["answer_e"] == null
+                   ? "-"
+                   : questionBarem.answers["answer_e"]
+               }
             </li>
             <li id="fbarem" class="barem_answer ${
               questionBarem.correct_answers["answer_f_correct"] == "true"
                 ? "green"
                 : ""
             }">
-               ${questionBarem.answers["answer_f"]}
+               ${
+                 questionBarem.answers["answer_f"] == null
+                   ? "-"
+                   : questionBarem.answers["answer_f"]
+               }
             </li>
           </ul>
    `;
