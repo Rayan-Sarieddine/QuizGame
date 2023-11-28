@@ -1,34 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Game/title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="quiz">
-    <p class="question"></p>
-    <ul>
-      <li>
-    <input type="radio" name="answer" id="a" class="answer">
-    <label for="a" id="a_text"></label>
-  </li>
-      <li>
-    <input type="radio" name="answer" id="b" class="answer">
-    <label for="b" id="b_text"></label>
-  </li>
-      <li>
-    <input type="radio" name="answer" id="c" class="answer">
-    <label for="c" id="c_text"></label>
-  </li>
-      <li>
-    <input type="radio" name="answer" id="d" class="answer">
-    <label for="d" id="d_text"></label>
-  </li>
-    </ul>
-    <button class="submit">Submit</button>
-  </div>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Quiz Time!</title>
+  </head>
+  <body>
+    <div class="quiz-container2" id="quiz">
+      <div class="quiz-header">
+        <h2 id="question1">Quiz Parameters</h2>
+        <ul>
+          <li>
+            <input type="radio" name="answer-1" id="linux" class="answer-1" />
+            <label for="linux" id="linux">linux</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer-1" id="devops" class="answer-1" />
+            <label for="devops" id="b_texdevops">DevOps</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer-1" id="networking" class="answer-1" />
+            <label for="networking" id="networking">Networking</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer-1" id="programming" class="answer-1" />
+            <label for="programming" id="programming"
+              >Programming (PHP, JS, Pythong and etc.)</label
+            >
+          </li>
+          <li>
+            <input type="radio" name="answer-1" id="cloud" class="answer-1" />
+            <label for="cloud" id="cloud">Cloud</label>
+          </li>
+          <li>
+            <input type="radio" name="answer-1" id="docker" class="answer-1" />
+            <label for="docker" id="docker">Docker</label>
+          </li>
+          <li>
+            <input type="radio" name="answer-1" id="kubernetes" class="answer-1" />
+            <label for="kubernetes" id="kubernetes">Kubernetes</label>
+          </li>
+          <li>
+            <input type="radio" name="answer-1" id="random" class="answer-1" checked />
+            <label for="random" id="random">Random</label>
+          </li>
+        </ul>
+        <label for="difficulty" class="input-label">Enter Difficulty:</label>
+        <select id="difficulty" name="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </br>
+        <label for="numberInput" class="input-label">Choose number of questions:</label>
+        <input
+          type="number"
+          id="numberInput"
+          name="numberInput"
+          min="1"
+          max="20"
+          value="10"
+          step="1"
+        />
+      </div>
+      <button id="submit-1">Submit</button>
+    </div>
+    <div class="quiz-container hidden" id="quiz">
+      <div class="quiz-header">
+        <h2 id="question">Question text</h2>
+        <ul>
+          <li>
+            <input type="radio" name="answer" id="a" class="answer" />
+            <label for="a" id="a_text">Question</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer" id="b" class="answer" />
+            <label for="b" id="b_text">Question</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer" id="c" class="answer" />
+            <label for="c" id="c_text">Question</label>
+          </li>
+
+          <li>
+            <input type="radio" name="answer" id="d" class="answer" />
+            <label for="d" id="d_text">Question</label>
+          </li>
+          <li>
+            <input type="radio" name="answer" id="e" class="answer" />
+            <label for="e" id="e_text">Question</label>
+          </li>
+          <li>
+            <input type="radio" name="answer" id="f" class="answer" />
+            <label for="f" id="f_text">Question</label>
+          </li>
+        </ul>
+      </div>
+      <button id="submit">Submit</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+  
+
+  </body>
 </html>
