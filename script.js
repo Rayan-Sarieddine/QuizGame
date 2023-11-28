@@ -1,76 +1,109 @@
+//inputs
 const categories_answer = document.querySelectorAll(".answer-1");
 const difficulty_answer = document.querySelector("#difficulty");
-const number_of_questions = document.querySelector("#numberInput");
+const number_of_questions_answer = document.querySelector("#numberInput");
+
+//buttons
 const btn_start = document.querySelector("#submit-1");
 const btn_submit = document.querySelector("#submit");
+const btn_view_answers = document.querySelector("#view-answers");
+
+//containers
 const first_container = document.querySelector(".quiz-container2");
 const questions_container = document.querySelector(".quiz-container");
+const answers_container = document.querySelector(".answers-container");
+const barem_container = document.querySelector(".barem");
+
+//items
 const question = document.querySelector("#question");
 const options = document.querySelectorAll(".answer");
-let category = "random";
+const result = document.querySelector(".results-value");
+const barem_item = document.querySelector(".barem-all");
+
+//input defaults
+let category = "linux";
 let difficulty = "easy";
 let questions = "10";
 
+//arrays
+let userAnswers = [];
+let correctanswerarray = [];
+let wrongAnswers = [];
+
+//starter values
+let questionindex = 0;
+let finalgrade = 0;
+
+//get the url to send to the API through getting the user's answers of the first form
 async function getURL() {
   return new Promise((resolve) => {
     btn_start.addEventListener("click", () => {
-      categories_answer.forEach((ans) => {
-        if (ans.checked) {
-          category = ans.id;
+      //submit button
+      difficulty = difficulty_answer.value; //drop down
+      questions = number_of_questions_answer.value; //number input
+      categories_answer.forEach((answer) => {
+        //radio buttons
+        if (answer.checked) {
+          category = answer.id;
+          if (category == "random") {
+            let url =
+              "https://quizapi.io/api/v1/questions?apiKey=YgPfmdveoIx5wN7UujeQwUTwr1cUrgn3Di47rOtd";
+            resolve(url);
+          } else {
+            let url = `https://quizapi.io/api/v1/questions?apiKey=YgPfmdveoIx5wN7UujeQwUTwr1cUrgn3Di47rOtd&category=${category}&difficulty=${difficulty}&limit=${questions}`;
+            resolve(url);
+          }
         }
       });
 
-      difficulty = difficulty_answer.value;
-      questions = number_of_questions.value;
-      first_container.classList.add("hidden");
-      questions_container.classList.remove("hidden");
-
-      let url = `https://quizapi.io/api/v1/questions?apiKey=YgPfmdveoIx5wN7UujeQwUTwr1cUrgn3Di47rOtd&category=${category}&difficulty=${difficulty}&limit=${questions}`;
-      resolve(url);
+      //URL to send to API
     });
   });
 }
-let useranswers = [];
+
+//get URL responce after it is submitted and send it with axios
 async function processData() {
   let response;
-
   try {
     const url = await getURL();
     response = await axios.get(url);
+
+    first_container.classList.add("hidden");
+    questions_container.classList.remove("hidden"); //show question container
     displayQuestion(response.data); // Display the first question
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 
+  //when user submits his answer to each question
   btn_submit.addEventListener("click", () => {
-    let uanswer;
+    let clickedAnswer;
     options.forEach((opt) => {
       if (opt.checked) {
-        uanswer = opt.id;
-        useranswers.push({ [question.dataset.id]: uanswer });
-        console.log(useranswers);
+        clickedAnswer = opt.id;
+        userAnswers.push({ [question.dataset.id]: clickedAnswer }); //{id of question: user choice-a,b,c,d,e,f}
+        console.log(userAnswers);
         displayNextQuestion(response.data);
         // Display the next question after submission
       }
     });
   });
 }
-let questionindex = 0;
-let correctanswerarray = [];
+
 function displayQuestion(questionsData) {
-  const currentQuestion = questionsData[questionindex]; // Displaying the first question
-  question.innerHTML = currentQuestion.question;
-  question.dataset.id = currentQuestion.id;
+  const currentQuestion = questionsData[questionindex]; // Displaying the first question starting at 0
+  question.innerHTML = currentQuestion.question; //show question
+  question.dataset.id = currentQuestion.id; //each question having a unique identifier
   options.forEach((opt) => {
     document.querySelector(`label[for="${opt.id}"]`).innerHTML =
-      questionsData[questionindex].answers[`answer_${opt.id}`];
+      questionsData[questionindex].answers[`answer_${opt.id}`]; //showing answers on each radio input
   });
   let correctAnswerKey = Object.keys(currentQuestion.correct_answers).find(
-    (key) => currentQuestion.correct_answers[key] === "true"
+    (key) => currentQuestion.correct_answers[key] === "true" //find the key whose value id true
   );
 
   correctanswerarray.push({
-    [currentQuestion.id]: correctAnswerKey.slice(7, 8),
+    [currentQuestion.id]: correctAnswerKey.slice(7, 8), //format{question id:a,b,c,d,e,f}
   });
   console.log(correctanswerarray);
 }
@@ -80,14 +113,12 @@ function displayNextQuestion(x) {
     questionindex++;
     displayQuestion(x);
   } else {
-    grading(correctanswerarray, useranswers, x);
+    grading(correctanswerarray, userAnswers, x);
   }
 }
 
 processData();
-let finalgrade = 0;
-let wrongAnswers = [];
-const answers_container = document.querySelector(".answers-container");
+//compare 2 arrays to get the grade
 function grading(answer, useranswer, x) {
   answer.map((obj, i) => {
     for (const [key, value] of Object.entries(obj)) {
@@ -103,15 +134,16 @@ function grading(answer, useranswer, x) {
   console.log("grade", finalgrade);
   questions_container.classList.add("hidden");
   answers_container.classList.remove("hidden");
-  document.querySelector(
-    ".results-value"
-  ).innerHTML = `You scored ${finalgrade} out of ${questions}`;
-  document.querySelector("#view-answers").addEventListener("click", () => {
+  result.innerHTML = `You scored ${finalgrade} out of ${questions}`;
+
+  btn_view_answers.addEventListener("click", () => {
+    barem_container.classList.remove("hidden");
     barem(x);
   });
   console.log(wrongAnswers);
 }
 
+//looping through the data again to show the question with the correct answer marked in green and if user gave wrong answer to display that in red
 function barem(x) {
   x.forEach((questionBarem) => {
     let flagwrong = false;
@@ -129,7 +161,7 @@ function barem(x) {
     console.log(questionBarem.correct_answers["answer_c_correct"]);
     div_answer.innerHTML = `
     <h2 id="barem-question ${questionBarem.id}">${questionBarem.question}</h2>
-          <ul>
+          <ul class="barem-list">
             <li id="a_barem${questionBarem.id}" class="barem_answer ${
       questionBarem.correct_answers["answer_a_correct"] == "true" ? "green" : ""
     }">
@@ -189,7 +221,7 @@ function barem(x) {
             </li>
           </ul>
    `;
-    document.querySelector(".barem-all").appendChild(div_answer);
+    barem_item.appendChild(div_answer);
     if (flagwrong) {
       document
         .querySelector(`#${wrongchoice}_barem${questionBarem.id}`)

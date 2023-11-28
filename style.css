@@ -94,3 +94,7 @@ button:focus {
   background-color: red;
   color: white;
 }
+.barem-list {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
